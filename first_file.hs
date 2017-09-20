@@ -8,7 +8,7 @@ doubleSmallNumber' x = (if x > 100 then x else doubleMe x) + 1
 maxList :: (Ord a) => [a] -> a
 maxList [] = error "need a non-empty list!"
 maxList [x] = x
-maxList (x:y:xs) = maxList (max x y:xs)
+maxList (x:y:xs) = maxList (max x y):xs
 
 -- rewriting maximum function (does the same as maxList)
 maximum' :: (Ord a) => [a] -> a
@@ -188,3 +188,16 @@ zip' :: [a] -> [b] -> [(a, b)]
 zip' _ [] = []
 zip' [] _ = []
 zip' (x:xs) (y:ys) = (x,y) : zip' xs ys
+
+-- rewriting the elem function, it checks if an element is in a list, returns a boolean
+elem' :: Eq t => t -> [t] -> Bool
+elem' a [] = False
+elem' a (x:xs) = a == x || elem' a xs
+
+-- writing a quicksort function
+quicksort :: (Ord a) => [a] -> [a]
+quicksort [] = []
+quicksort (x:xs) =
+  let lessSort = quicksort [ y | y <- xs, y <= x ]
+      greatSort = quicksort [ z | z <- xs, z > x]
+  in  lessSort ++ [x] ++ greatSort
