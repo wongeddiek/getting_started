@@ -26,8 +26,8 @@ list123 (x:y:z:xs) = if x == 1 && y == 2 && z == 3 then True else list123 (y:z:x
 -- base case(s), and then implement your recursive call(s)
 
 -- same2Chars :: (Num p) => String -> String -> p
-same2Chars "" y = 0
-same2Chars x "" = 0
+same2Chars [] y = 0
+same2Chars x [] = 0
 same2Chars x [y] = 0
 same2Chars [x] y = 0
 same2Chars (xa:xb:xs) (ya:yb:ys) = (if xa:xb:[] == ya:yb:[] then 1 else 0) + same2Chars (xb:xs) (yb:ys)
@@ -42,9 +42,9 @@ same2Chars (xa:xb:xs) (ya:yb:ys) = (if xa:xb:[] == ya:yb:[] then 1 else 0) + sam
 -- might help...
 
 -- stripX :: String -> String
-stripX [] = error "please input a non-empty string"
+stripX [] = []
 stripX [x] = [x]
-stripX (x:xs) = [x] ++ [y | y <- init xs, y /= 'x'] ++ [last xs]
+stripX (x:xs) = [x] ++ [y | y <- init xs, y /= 'x', y /= 'X'] ++ [last xs]
 
 
 -- String Challenge: stringZipper
@@ -52,10 +52,9 @@ stripX (x:xs) = [x] ++ [y | y <- init xs, y /= 'x'] ++ [last xs]
 -- Given two strings, zip them together into a new string with alternating characters
 -- from both string arguments. For example: Given "abc" and "xyz", return "axbycz".
 -- Assume the strings have the same length.
-stringZipper [] x = x
+stringZipper [] y = y
 stringZipper x [] = x
-stringZipper [x] [y] = x:y:[]
-stringZipper (x:xs) (y:ys) = x:y:[] ++ stringZipper xs ys
+stringZipper (x:xs) (y:ys) = x:y:stringZipper xs ys
 
 
 --running all the functions with test cases
