@@ -1,3 +1,5 @@
+-- 20170920 coding challenges
+
 -- AP CS Challenge: scoresIncreasing
 -- -------------------------------------------------------------------------------------
 -- Given an array of scores, return true if each score is equal or greater than the one
