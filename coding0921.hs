@@ -50,7 +50,8 @@ copyEvens xs n = take n [x | x <- xs, x `mod` 2 == 0]
 -- endy numbers from the original array. Hint: An array filter method would work well
 -- here as well.
 copyEndy :: (Ord a, Num a) => [a] -> Int -> [a]
-copyEndy xs n = take n [x | x <-xs, x <= 10 || x >= 90]
+copyEndy xs n = takeN [x | x <-xs, x <= 10 || x >= 90]
+  where takeN = take n
 
 
 main = do
