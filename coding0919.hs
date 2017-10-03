@@ -49,6 +49,21 @@ alarmClock day False = if (day `mod` 6 > 0) then "7:00" else "10:00"
 --using foldr
 arrayConcat xs ys = foldr (:) ys xs
 
+-- /*
+--
+-- Array Challenge: arrayForEach
+-- -------------------------------------------------------------------------------------
+-- Much like the previous arrayConcat challenge, rebuild the Array protoype method
+-- forEach(), without using the built-in forEach method! Read up on forEach here:
+-- https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach
+--
+-- Hint: All you really need to do is use a simple for loop and to call the callback
+-- function!
+--
+-- */
+arrayForEach _ [] = []
+arrayForEach f (x:xs) = f x : arrayForEach f xs
+
 
 main = do
   print ("cigarParty tests")
@@ -78,5 +93,7 @@ main = do
   print (arrayConcat [3] [1, 4, 1, 5, 9]) --[3,1,4,1,5,9]
   print (arrayConcat [2, 7] [1, 8, 2, 8]) --[2,7,1,8,2,8]
   print (arrayConcat [1, 4, 1, 4] [2, 1, 3]) --[1,4,1,4,2,1,3]
+  putStrLn ""
 
-  -- arrayForEach [1, 2, 3] (let f num = print (num + 5))
+  print ("arrayForEach tests")
+  print (arrayForEach (* 2) [1, 2, 3] )
