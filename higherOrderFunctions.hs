@@ -116,3 +116,23 @@ map2 f xs = foldr (\x acc -> f x : acc) [] xs
 map3 f xs = foldl (\acc x -> acc ++ [f x]) [] xs
 
 -- foldl's binary function parameters are (\acc x), and it iterates the list from left to right.  foldr's binary function parameters are (\x acc), and it iterates the list from right to left.  It makes sense to use foldr to iterate over a list and returns the modified list (ie: map)
+
+-- rewriting standard library functions using folds
+maximum' :: (Foldable t, Ord a) => t a -> a
+maximum' = foldl1 (\acc x -> if acc >= x then acc else x)
+
+reverse' :: [a] -> [a]
+-- reverse' = foldl (\acc x -> x:acc) []
+reverse' = foldl (flip (:)) []
+
+product' :: (Num a) => [a] -> a
+product' = foldl1 (*)
+
+filter2 :: (a -> Bool) -> [a] -> [a]
+filter2 f = foldr (\x acc -> if f x then x : acc else acc) []
+
+head' :: [a] -> a
+head' = foldl1 (\acc _ -> acc)
+
+last' :: [a] -> a
+last' = foldr1 (\_ acc -> acc)
