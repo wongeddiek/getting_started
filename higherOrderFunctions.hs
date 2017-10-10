@@ -86,9 +86,33 @@ collatz n
 collatzTest = length (filter p (map collatz [1..100]))
   where p xs = length xs > 15
 
+-- using lambdas (annoyonmous functions) with the above function:
+collatzTest' = length (filter (\xs -> length xs > 15) (map collatz [1..100]))
 
 -- the below maps (*) to a list of numbers starting with 0 and returns a list of functions
 -- [(*0), (*1), (*2)...]
 -- let listOfFuns = map (*) [0..]
--- calling the index 4 of the above list give you (* 4), passin 5 as the second parameter gives you 20  
+-- calling the index 4 of the above list give you (* 4), passin 5 as the second parameter gives you 20
 -- (listOfFuns !! 4) 5
+
+-- function that takes a list of (partially applied) functions and a list and apply each partial funciton element to each element in the 2nd parameter list.  Return the result of each pair in a list.
+funZip _ [] = []
+funZip (f:fs) (y:xs) = f y : funZip fs xs
+
+-- sum function using foldl
+sum' xs = foldl (\acc x -> acc + x) 0 xs
+
+-- using curried function
+sum2 :: (Num a) => [a] -> a
+sum2 = foldl (+) 0
+
+-- elem function using foldl
+elem' y xs = foldl (\acc x -> if x == y then True else acc) False xs
+
+-- map function using foldr
+map2 f xs = foldr (\x acc -> f x : acc) [] xs
+
+-- map function using foldl
+map3 f xs = foldl (\acc x -> acc ++ [f x]) [] xs
+
+-- foldl's binary function parameters are (\acc x), and it iterates the list from left to right.  foldr's binary function parameters are (\x acc), and it iterates the list from right to left.  It makes sense to use foldr to iterate over a list and returns the modified list (ie: map)
