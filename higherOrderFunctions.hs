@@ -136,3 +136,20 @@ head' = foldl1 (\acc _ -> acc)
 
 last' :: [a] -> a
 last' = foldr1 (\_ acc -> acc)
+
+-- function for finding number of elements it takes for the sum of the roots of all natural numbers to exceed n
+sumOfSqrt :: Int -> Int
+sumOfSqrt n = length (takeWhile (< n) (scanl (+) [] (map sqrt [1..]))) + 1
+
+-- function composition
+-- fn x = ceiling (negate (tan (cos (max 50 x))))
+fn = ceiling . negate . tan . cos . max 50
+
+-- find the sum of all odd squares that are smaller than 10,000
+-- rewrite with function composition
+oddSquares' = sum . takeWhile (< 10000) . filter odd . map (^2) & [1..]
+-- for better readabilty
+oddSquare2 =
+    let oddSquares = filter odd $ map (^2) [1..]
+        belowLimit = takeWhile (<10000) oddSquares
+    in  sum belowLimit
