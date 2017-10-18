@@ -147,7 +147,7 @@ fn = ceiling . negate . tan . cos . max 50
 
 -- find the sum of all odd squares that are smaller than 10,000
 -- rewrite with function composition
-oddSquares' = sum . takeWhile (< 10000) . filter odd . map (^2) & [1..]
+oddSquares' = sum . takeWhile (< 10000) . filter odd . map (^2) $ [1..]
 -- for better readabilty
 oddSquare2 =
     let oddSquares = filter odd $ map (^2) [1..]

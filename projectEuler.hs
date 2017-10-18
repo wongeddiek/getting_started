@@ -63,17 +63,39 @@ palinProduct n = filter (isPalin) [ x * y | x <- [(n * 9 `div` 10)..n], y <- [(n
 -- 2520 is the smallest number that can be divided by each of the numbers from 1 to 10 without any remainder.
 -- What is the smallest positive number that is evenly divisible by all of the numbers from 1 to 20?
 
--- rewriting the lcm function, given two numbers a, b.  First get list of all multiples of b, filter the list where each multiple is also a multiple of a, take the head of this filtered list
+-- rewriting the lcm function, given two numbers x,y, where a is min (abs x y) and b is max (abs x y).  First get list of all multiples of b, filter the list where each multiple is also a multiple of a, take the head of this filtered list
 lcm' :: Int -> Int -> Int
 lcm' 0 _ = 0
 lcm' _ 0 = 0
-lcm' a b = head $ filter (\y -> y `mod` a == 0) (map (\x -> x * b) [1..])
+lcm' x y = head $ filter (\z -> z `mod` a == 0) (map (\z -> z * b) [1..])
+  where a = min (abs x) (abs y)
+        b = max (abs x) (abs y)
 
 -- find the lcm given a list of numbers (x:y:xs).  Find lcm of x,y = z, then recursively call the function with (z:xs)
 lcmList []      = 0
 lcmList (x:[])   = 0
-lcmList (x:y:[]) = lcm x y
-lcmList (x:y:xs) = lcmList $ (lcm x y):xs
+lcmList (x:y:[]) = lcm' x y
+lcmList (x:y:xs) = lcmList $ (lcm' x y):xs
+
+-- another way to find LCM of two numbers
+-- function finding the most occurred prime factors between 2 numbers
+primeFactorPairs :: [Int] -> Int -> Int -> [Int]
+primeFactorPairs _ 1 1 = []
+primeFactorPairs (a:as) x y
+  | (x `mod` a) + (y `mod` a) == 0 = a : primeFactorPairs (a:as) (x `div` a) (y `div` a)
+  | (x `mod` a) == 0               = a : primeFactorPairs (a:as) (x `div` a) y
+  | (y `mod` a) == 0               = a : primeFactorPairs (a:as) x (y `div` a)
+  | otherwise                      = primeFactorPairs as x y
+
+-- lcm between 2 numbers is the product of the most occurred prime factors b/w 2 numbers
+lcm'' :: Int -> Int -> Int
+lcm'' x y = product $ primeFactorPairs [2..] x y
+
+lcmList' :: [Int] -> Int
+lcmList' []      = 0
+lcmList' (x:[])   = 0
+lcmList' (x:y:[]) = lcm'' x y
+lcmList' (x:y:xs) = lcmList' $ (lcm'' x y):xs
 
 
 -- Problem 6: Sum square difference
