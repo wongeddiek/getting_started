@@ -10,3 +10,9 @@ rna_tran xs = [ map x | x <- xs , x == 'G' || x == 'C' || x == 'T' || x == 'A']
         map 'C' = 'G'
         map 'T' = 'A'
         map 'A' = 'U'
+
+-- given a list, check if the list is a palindrome
+listPal :: Eq a => [a] -> Bool
+listPal [x] = True
+listPal [x,y] = x == y
+listPal (x:xs) = x == last xs && (listPal $ init xs)
