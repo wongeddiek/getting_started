@@ -54,9 +54,8 @@ divisors x y = filter (\ z -> ((mod x z) + (mod y z)) == 0)  [a, b..1]
 
 -- Prime sieve - inefficient
 primesTo m = sieve [2..m]       {- (\\) is set-difference for unordered lists -}
-             where
-             sieve (x:xs) = x : sieve (xs \\ [x,x+x..m])
-             sieve [] = []
+   where sieve (x:xs) = x : sieve (xs \\ [x,x+x..m])
+         sieve []     = []
 
 -- prime sieve - more efficient
 -- infinite prime list.  Uses the Data.List.Ordered module -> minus, unionAll functions
@@ -68,8 +67,6 @@ primesTo m = sieve [2..m]       {- (\\) is set-difference for unordered lists -}
 --Start with the first 2 primes, next generate a nested list of all odd prime multiples, starting with prime^2 using list comprehension, beginning with 3.  Computes the union of this nested list using 'unionAll'.  Then, using a list of all odd numbers starting 5, compute the difference with the multiple list using 'minus' to remove all the odd prime multiples.
 
 primesList = 2 : 3 : minus [5,7..] (unionAll [[p*p, p*p+p*2..] | p <- tail primesList])
-
--- primes = 2 : 3 : minus [5,7..] (unionAll [[p*p, p*p+2*p..] | p <- tail primes])
 
 
 -- Generate an infinite prime list

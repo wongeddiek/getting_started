@@ -1,4 +1,5 @@
 import Data.Char (digitToInt) --for Problem 8
+import Data.List.Ordered (minus, union, unionAll) -- for Problem 10
 
 -- Problem 1: Multiples of 3 and 5
 -- If we list all the natural numbers below 10 that are multiples of 3 or 5, we get 3, 5, 6 and 9. The sum of these multiples is 23.
@@ -74,6 +75,7 @@ lcm' x y = head $ filter (\z -> z `mod` a == 0) (map (\z -> z * b) [1..])
         b = max (abs x) (abs y)
 
 -- find the lcm given a list of numbers (x:y:xs).  Find lcm of x,y = z, then recursively call the function with (z:xs)
+lcmList :: [Int] -> Int
 lcmList []      = 0
 lcmList (x:[])   = 0
 lcmList (x:y:[]) = lcm' x y
@@ -116,7 +118,8 @@ sumSquareDiff xs = squaredOfSum xs - sumOfSquared xs
 -- function generating an infinite prime list
 -- start with 2, attach it with a tail prime list that we'll build.
 -- The tail prime list will start at 3, attach it to a filtered list of odd numbers, where the predicate will take this same tail prime list, and check each element in the odd numbers list to each element in this same tail prime list to see if it's divisble (check prime).
--- This can be more efficient.  How can we implement a sieve prime finder?
+-- This can be more efficient.
+primesList' :: [Int]
 primesList' = 2 : primes'
   where isPrime (p:ps) n = p*p > n || n `rem` p /= 0 && isPrime ps n
         primes' = 3 : filter (isPrime primes') [5, 7 ..]
@@ -129,7 +132,54 @@ longNum = "731671765313306249192251196744265747423553491949349698352031277450632
 
 -- Grab each consecutive 13-digits number strings from longNum,  pass productNum function -- which coverts each number char to Int and multiply them together, and set them into a new list with the product of each 13-d consec. number.
 
+largestProduct :: Int
 largestProduct = maximum (numList longNum)
   where numList []        = []
         numList (x:xs)    =  productNum (take 13 (x:xs)) : numList xs
         productNum        = foldl (\acc x -> acc * (digitToInt x)) 1
+
+
+-- Problem 9 - Special Pythagorean triplet
+-- There exists exactly one Pythagorean triplet for which a + b + c = 1000.
+-- Find the product abc.
+--
+-- Using the following Pythagorean triplet theorem:
+--  When m and n are any two positive integers (m < n):
+--
+--  a = 2nm
+--  b = n^2 - m^2
+--  c = n^2 + m^2
+--
+--  let a + b + c = x, substituting a,b,c with the above
+--  2nm + n^2 - m^2 + n^2 + m^2 = x, solve for m
+--  nm + n^2 = x/2
+--  m + n = x/2n
+--  m = x/2n - n, x must be divisible by 2n, m must be > 0
+--  conditions for n:
+--  x % 2n === 0
+--  x/2n - n > 0
+--
+--  from nm + n^2 = x/2, we get the following condition if n, m are > 0
+--  n^2 < x/2
+
+-- function for finding n given the above conditions
+findN :: Int -> Int
+findN sum' = last $ takeWhile (\n -> (n^2) < (sum' `div` 2)) (filter (\n -> (divisible n) && (greaterZero n)) [1..])
+  where divisible a   = sum' `mod` (2*a) == 0
+        greaterZero a = sum' `div` (2*a) > 0
+
+-- function for getting a, b, c, and their product
+getPyProduct :: Int -> [Int]
+getPyProduct sum' = a : b : c : a*b*c : []
+  where n = findN sum'
+        m = sum' `div` (2*n) - n
+        a = 2*n*m
+        b = n^2 - m^2
+        c = n^2 + m^2
+
+-- Problem 10: Summation of primes
+-- The sum of the primes below 10 is 2 + 3 + 5 + 7 = 17.
+-- Find the sum of all the primes below two million.
+primesList = 2 : 3 : minus [5,7..] (unionAll [[p*p, p*p+p*2..] | p <- tail primesList])
+
+primesUnder2Mil = sum $ takeWhile (< 2000000) primesList
