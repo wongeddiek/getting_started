@@ -71,8 +71,10 @@ lcm' :: Int -> Int -> Int
 lcm' 0 _ = 0
 lcm' _ 0 = 0
 lcm' x y = head $ filter (\z -> z `mod` a == 0) (map (\z -> z * b) [1..])
-  where a = min (abs x) (abs y)
-        b = max (abs x) (abs y)
+  where absx = abs x
+        absy = abs y
+        a = min (absx) (absy)
+        b = max (absx) (absy)
 
 -- find the lcm given a list of numbers (x:y:xs).  Find lcm of x,y = z, then recursively call the function with (z:xs)
 lcmList :: [Int] -> Int
